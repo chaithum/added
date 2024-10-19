@@ -407,3 +407,18 @@ module.exports = { adminsignUp, adminlogIn, adminforgotpassword };
 //     manageUserRatings,
 //     adminforgotPassword
 // };
+const express = require('express')
+require('./config/db')
+const cors = require('cors')
+const AdminRouter = require('./routes/Admin-routes')
+const app = express()
+app.use(cors())
+app.set('view engine', 'ejs')
+app.use(express.json())
+app.use("/api/admin",AdminRouter)
+// app.use("/api/food", FoodRouter)
+app.use("/api", (req, res, next) => {
+    res.send("hello")
+})
+ 
+app.listen(5000, () => console.log("app started at 5000..."));
