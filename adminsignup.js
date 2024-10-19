@@ -5,17 +5,19 @@ import {
   MDBInput,
   MDBBtn,
   MDBCard,
-  MDBCardBody,
-  MDBAlert
+  MDBCardBody
 } from "mdb-react-ui-kit";
+import { MDBAlert} from "mdbreact"
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import "./Signup.css"; // Import your custom CSS
+import "./signup.css"; // Import your custom CSS
 import config from "../config";
 
-const Signup = () => {
+
+
+const AdminSignup = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const [inputs, setInputs] = useState({
-    full_name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -32,17 +34,17 @@ const Signup = () => {
   // Validate username
   const validateUsername = async (username) => {
     if (username.length < 6) {
-      setFieldErrors((prev) => ({ ...prev, full_name: "Username must be at least 6 characters" }));
+      setFieldErrors((prev) => ({ ...prev, username: "Username must be at least 6 characters" }));
       setIsUsernameValid(false);
       return;
     }
     try {
       const res = await axios.get(`${config.BASE_URL}/api/check-username?username=${username}`);
       if (res.data.exists) {
-        setFieldErrors((prev) => ({ ...prev, full_name: "Username already exists" }));
+        setFieldErrors((prev) => ({ ...prev, username: "Username already exists" }));
         setIsUsernameValid(false);
       } else {
-        setFieldErrors((prev) => ({ ...prev, full_name: "" }));
+        setFieldErrors((prev) => ({ ...prev, username: "" }));
         setIsUsernameValid(true);
       }
     } catch (err) {
@@ -92,7 +94,7 @@ const Signup = () => {
     const { id, value } = e.target;
     setInputs((prevState) => ({ ...prevState, [id]: value }));
 
-    if (id === "full_name") {
+    if (id === "username") {
       validateUsername(value);
     } else if (id === "email") {
       validateEmail(value);
@@ -109,10 +111,10 @@ const Signup = () => {
 
   const validateFields = () => {
     const errors = {};
-    if (!inputs.full_name) errors.full_name = "Full name is required";
+    if (!inputs.username) errors.username = "Full name is required";
     if (!inputs.email) errors.email = "Email is required";
     if (!inputs.password) errors.password = "Password is required";
-    if (!isUsernameValid) errors.full_name = "Invalid username";
+    if (!isUsernameValid) errors.username = "Invalid username";
     if (!isEmailValid) errors.email = "Invalid email";
     if (!isPasswordValid) errors.password = "Invalid password";
     if (!isConfirmPasswordValid) errors.confirmPassword = "Confirm password is invalid";
@@ -135,16 +137,17 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (validateFields()) {
       const data = await sendRequest();
       if (data && data.success) {
         setSuccessMessage("Signup successful! Please check your email to verify.");
-        setInputs({ full_name: "", email: "", password: "", confirmPassword: "" });
+        setInputs({ username: "", email: "", password: "", confirmPassword: "" });
         setIsUsernameValid(false);
         setIsEmailValid(false);
         setIsPasswordValid(false);
         setIsConfirmPasswordValid(false);
-        
+        console.log(inputs);
         // Redirect to login page after signup
         navigate("/login"); // Change "/login" to the actual path of your login page
       } else {
@@ -163,37 +166,37 @@ const Signup = () => {
           {generalError && <MDBAlert color="danger">{generalError}</MDBAlert>}
 
           <form onSubmit={handleSubmit}>
+            <label>User Name</label>
             <MDBInput
-              label="Full Name"
-              id="full_name"
-              value={inputs.full_name}
+              id="username"
+              value={inputs.username}
               onChange={handleChange}
               style={{ borderColor: isUsernameValid ? "green" : fieldErrors.full_name ? "red" : "" }}
+              required
             />
             {fieldErrors.full_name && <div className="text-danger">{fieldErrors.full_name}</div>}
-
+            <label>Email</label>
             <MDBInput
-              label="Email Address"
               id="email"
               type="email"
               value={inputs.email}
               onChange={handleChange}
               style={{ borderColor: isEmailValid ? "green" : fieldErrors.email ? "red" : "" }}
+              required
             />
             {fieldErrors.email && <div className="text-danger">{fieldErrors.email}</div>}
-
+             <label>Password</label>
             <MDBInput
-              label="Password"
               id="password"
               type="password"
               value={inputs.password}
               onChange={handleChange}
               style={{ borderColor: isPasswordValid ? "green" : fieldErrors.password ? "red" : "" }}
+              required
             />
             {fieldErrors.password && <div className="text-danger">{fieldErrors.password}</div>}
-
+            <label>Conform Password</label>
             <MDBInput
-              label="Confirm Password"
               id="confirmPassword"
               type="password"
               value={inputs.confirmPassword}
@@ -201,7 +204,7 @@ const Signup = () => {
               style={{ borderColor: isConfirmPasswordValid ? "green" : fieldErrors.confirmPassword ? "red" : "" }}
             />
             {fieldErrors.confirmPassword && <div className="text-danger">{fieldErrors.confirmPassword}</div>}
-
+            <p>Have account? <a href="/login">Login</a></p>
             <MDBBtn color="primary" type="submit" block disabled={!isUsernameValid || !isEmailValid || !isPasswordValid || !isConfirmPasswordValid}>
               Sign Up
             </MDBBtn>
@@ -212,4 +215,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default AdminSignup;
