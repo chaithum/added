@@ -148,11 +148,11 @@ const AdminSignup = () => {
         setIsPasswordValid(false);
         setIsConfirmPasswordValid(false);
         console.log(inputs);
-        // Redirect to login page after signup
-        navigate("/login"); // Change "/login" to the actual path of your login page
+        console.log(`${config.BASE_URL}/api/admin/signup`)
       } else {
         setGeneralError("Signup failed. Please try again.");
       }
+      navigate("/adminlogin");
     }
   };
 
@@ -171,10 +171,10 @@ const AdminSignup = () => {
               id="username"
               value={inputs.username}
               onChange={handleChange}
-              style={{ borderColor: isUsernameValid ? "green" : fieldErrors.full_name ? "red" : "" }}
+              style={{ borderColor: isUsernameValid ? "green" : fieldErrors.username ? "red" : "" }}
               required
             />
-            {fieldErrors.full_name && <div className="text-danger">{fieldErrors.full_name}</div>}
+            {fieldErrors.username && <div className="text-danger">{fieldErrors.username}</div>}
             <label>Email</label>
             <MDBInput
               id="email"
