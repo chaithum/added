@@ -1,0 +1,21 @@
+body {
+    background-color: #f8f9fa; /* Light background color for the entire page */
+  }
+  
+  h3 {
+    color: #007bff; /* Primary color for headings */
+  }
+  
+  .text-danger {
+    font-size: 0.9rem; /* Smaller font size for error messages */
+  }
+  
+  .alert {
+    margin-bottom: 20px; /* Space between alerts and form */
+  }
+  
+  .mdb-card {
+    border-radius: 15px; /* Rounded corners for the card */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  }
+  
